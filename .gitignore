@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.pyc
+
+# MacOS
+.DS_Store
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Environment
+.env
+venv/
+
+# Spark
+spark-warehouse/
+
+# Data files
+*.csv
+*.parquet
+
+# IDE
+.vscode/
+.idea/
