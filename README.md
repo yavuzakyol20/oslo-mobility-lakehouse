@@ -1,21 +1,10 @@
 # Oslo Mobility Lakehouse
 
-End-to-end data engineering project using Python, PySpark, SQL and Lakehouse architecture principles.
+End-to-end data engineering project using Python, pandas and Lakehouse architecture principles.
 
-## Technologies
+## Project Architecture
 
-- Python
-- PySpark
-- SQL
-- Delta Lake
-- Airflow
-- GitHub Actions
-- Terraform
-
-## Architecture
-
-Bronze -> Silver -> Gold
-
-## Goal
-
-Analyze mobility and weather data in Oslo using modern data engineering tools.
+```text
+Bronze Layer  -> Raw weather data
+Silver Layer  -> Cleaned and standardized data
+Gold Layer    -> Aggregated analytics data
