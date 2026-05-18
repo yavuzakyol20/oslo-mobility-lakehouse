@@ -1,0 +1,35 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  validate-python-pipeline:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run weather ingestion
+        run: python src/ingestion/ingest_weather.py
+
+      - name: Run data quality checks
+        run: python src/utils/data_quality_checks.py
+
+      - name: Run silver transformation
+        run: python src/transformations/bronze_to_silver_weather.py
+
+      - name: Run gold transformation
+        run: python src/transformations/silver_to_gold_weather.py
