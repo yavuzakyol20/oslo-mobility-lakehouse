@@ -1,0 +1,11 @@
+version: "3.9"
+
+services:
+  weather-pipeline:
+    build: .
+    container_name: weather-pipeline
+
+    volumes:
+      - .:/app
+
+    command: python src/ingestion/real_weather_ingestion.py
