@@ -20,3 +20,14 @@ Gold Layer    -> Aggregated analytics data
 - GitHub Actions CI/CD
 - Infrastructure as Code with Terraform
 - Databricks-style notebook workspace
+
+## Architecture
+
+```text
+External Weather API
+        ↓
+Bronze Layer (Parquet)
+        ↓
+Silver Layer (Cleaned Parquet)
+        ↓
+Gold Layer (Analytics Parquet)
