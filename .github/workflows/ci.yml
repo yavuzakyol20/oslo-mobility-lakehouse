@@ -23,7 +23,7 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Run weather ingestion
-        run: python src/ingestion/ingest_weather.py
+        run: python src/ingestion/real_weather_ingestion.py
 
       - name: Run data quality checks
         run: python src/utils/data_quality_checks.py
