@@ -32,11 +32,11 @@ def fetch_weather_data():
 
 def save_to_bronze(df):
     output_dir = "data/bronze"
-    output_path = os.path.join(output_dir, "real_weather.csv")
+    output_path = os.path.join(output_dir, "real_weather.parquet")
 
     os.makedirs(output_dir, exist_ok=True)
 
-    df.to_csv(output_path, index=False)
+    df.to_parquet(output_path, index=False)
 
     print(f"Real weather data saved to {output_path}")
 
