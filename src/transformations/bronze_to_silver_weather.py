@@ -4,12 +4,12 @@ import pandas as pd
 
 
 def read_bronze_weather():
-    input_path = "data/bronze/weather.csv"
+    input_path = "data/bronze/real_weather.parquet"
 
     if not os.path.exists(input_path):
         raise FileNotFoundError(f"Bronze file not found: {input_path}")
 
-    return pd.read_csv(input_path)
+    return pd.read_parquet(input_path)
 
 
 def transform_weather_data(df):
@@ -20,7 +20,8 @@ def transform_weather_data(df):
     df = df.dropna()
 
     df["city"] = df["city"].str.strip().str.lower()
-    df["condition"] = df["condition"].str.strip().str.lower()
+
+    df["windspeed"] = df["windspeed"].astype(float)
 
     df["temperature"] = df["temperature"].astype(float)
 
@@ -29,11 +30,11 @@ def transform_weather_data(df):
 
 def save_to_silver(df):
     output_dir = "data/silver"
-    output_path = os.path.join(output_dir, "weather_clean.csv")
+    output_path = os.path.join(output_dir, "weather_clean.parquet")
 
     os.makedirs(output_dir, exist_ok=True)
 
-    df.to_csv(output_path, index=False)
+    df.to_parquet(output_path, index=False)
 
     print(f"Clean weather data saved to {output_path}")
 
