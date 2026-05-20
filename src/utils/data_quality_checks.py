@@ -5,7 +5,7 @@ def validate_weather_data(df):
     required_columns = [
         "city",
         "temperature",
-        "condition",
+        "windspeed",
         "timestamp"
     ]
 
@@ -23,5 +23,5 @@ def validate_weather_data(df):
 
 
 if __name__ == "__main__":
-    df = pd.read_csv("data/bronze/weather.csv")
+    df = pd.read_parquet("data/bronze/real_weather.parquet")
     validate_weather_data(df)
