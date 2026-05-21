@@ -2,3 +2,4 @@ pandas
 requests
 pyspark
 pyarrow
+delta-spark
