@@ -16,8 +16,12 @@ gold:
 pyspark:
 	python src/transformations/pyspark_weather_transformation.py
 
+delta:
+	python src/transformations/delta_weather_transformation.py
+
 pipeline:
 	make ingest
 	make quality
 	make silver
 	make gold
+	make delta
