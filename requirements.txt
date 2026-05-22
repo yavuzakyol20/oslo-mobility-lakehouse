@@ -3,3 +3,4 @@ requests
 pyspark
 pyarrow
 delta-spark
+pytest
