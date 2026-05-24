@@ -33,3 +33,6 @@ jobs:
 
       - name: Run gold transformation
         run: python src/transformations/silver_to_gold_weather.py
+
+      - name: Run unit tests
+        run: pytest
