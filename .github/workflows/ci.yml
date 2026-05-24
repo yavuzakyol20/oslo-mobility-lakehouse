@@ -36,3 +36,6 @@ jobs:
 
       - name: Run unit tests
         run: pytest
+
+      - name: Build Docker image
+        run: docker build -t oslo-mobility-lakehouse .
