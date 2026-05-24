@@ -2,7 +2,6 @@
 
 ![CI](https://github.com/yavuzakyol20/oslo-mobility-lakehouse/actions/workflows/ci.yml/badge.svg)
 
-# Oslo Mobility Lakehouse
 
 End-to-end data engineering project using Python, pandas and Lakehouse architecture principles.
 
