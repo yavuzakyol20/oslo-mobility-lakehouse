@@ -4,7 +4,8 @@ from airflow import DAG
 from airflow.operators.bash import BashOperator
 
 
-PROJECT_PATH = "/opt/airflow/oslo-mobility-lakehouse"
+PROJECT_PATH = "/opt/airflow/project"
+
 
 with DAG(
     dag_id="weather_lakehouse_pipeline",
