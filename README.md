@@ -24,6 +24,18 @@ Gold Layer    -> Aggregated analytics data
 - Infrastructure as Code with Terraform
 - Databricks-style notebook workspace
 
+## Data Engineering Concepts Covered
+
+- Data ingestion from external APIs
+- Bronze/Silver/Gold Lakehouse architecture
+- Data quality validation
+- PySpark-based transformations
+- Airflow DAG orchestration
+- Docker containerization
+- GitHub Actions CI/CD
+- Infrastructure as Code with Terraform
+- Databricks-style notebook workspace
+
 ## Architecture
 
 ```text
