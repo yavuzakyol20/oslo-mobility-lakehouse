@@ -1,24 +1,21 @@
 # Python
 __pycache__/
 *.pyc
-
-# MacOS
-.DS_Store
-
-# Jupyter
-.ipynb_checkpoints/
-
-# Environment
-.env
+.venv/
 venv/
+.env
 
-# Spark
-spark-warehouse/
+# Data
+data/raw/*
+data/processed/*
+data/bronze/*
+data/silver/*
+data/gold/*
 
-# Data files
-*.csv
-*.parquet
+# Keep folder structure
+!data/bronze/.gitkeep
+!data/silver/.gitkeep
+!data/gold/.gitkeep
 
-# IDE
-.vscode/
-.idea/
+# OS
+.DS_Store
