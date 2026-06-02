@@ -46,3 +46,28 @@ Bronze Layer (Parquet)
 Silver Layer (Cleaned Parquet)
         ↓
 Gold Layer (Analytics Parquet)
+
+## Azure Lakehouse Architecture
+
+Pipeline flow:
+
+API → Bronze → Silver → Gold
+
+### Bronze
+- Raw JSON weather data stored in Azure Data Lake Storage Gen2
+
+### Silver
+- Cleaned and standardized Parquet datasets
+
+### Gold
+- Analytics-ready weather summary datasets
+
+### Technologies
+- Python
+- Azure Data Lake Storage Gen2
+- Azure Identity
+- Pandas
+- PyArrow
+- Apache Airflow
+- Docker
+
