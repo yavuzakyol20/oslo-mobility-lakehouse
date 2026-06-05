@@ -15,17 +15,39 @@ with DAG(
 
     ingest_entur = BashOperator(
         task_id="ingest_entur_departures",
-        bash_command=f"cd {PROJECT_PATH} && python src/ingest_entur_departures_to_bronze.py",
+        bash_command=(
+            f"cd {PROJECT_PATH} && "
+            "python src/ingest_entur_departures_to_bronze.py"
+        ),
+    )
+
+    quality_check = BashOperator(
+        task_id="check_entur_bronze_quality",
+        bash_command=(
+            f"cd {PROJECT_PATH} && "
+            "python src/check_entur_bronze_quality.py"
+        ),
     )
 
     bronze_to_silver = BashOperator(
         task_id="entur_bronze_to_silver",
-        bash_command=f"cd {PROJECT_PATH} && python src/transform_entur_bronze_to_silver.py",
+        bash_command=(
+            f"cd {PROJECT_PATH} && "
+            "python src/transform_entur_bronze_to_silver.py"
+        ),
     )
 
     silver_to_gold = BashOperator(
         task_id="entur_silver_to_gold",
-        bash_command=f"cd {PROJECT_PATH} && python src/transform_entur_silver_to_gold.py",
+        bash_command=(
+            f"cd {PROJECT_PATH} && "
+            "python src/transform_entur_silver_to_gold.py"
+        ),
     )
 
-    ingest_entur >> bronze_to_silver >> silver_to_gold
+    (
+        ingest_entur
+        >> quality_check
+        >> bronze_to_silver
+        >> silver_to_gold
+    )
