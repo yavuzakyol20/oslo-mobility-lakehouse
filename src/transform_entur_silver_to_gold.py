@@ -48,11 +48,18 @@ def build_gold_summary(df):
         .agg(
             departure_count=("line_code", "count"),
             delayed_departures=("delay_minutes", lambda x: (x > 0).sum()),
+	    on_time_departures=("delay_minutes", lambda x: (x <= 0).sum()),
             avg_delay_minutes=("delay_minutes", "mean"),
             max_delay_minutes=("delay_minutes", "max"),
         )
         .reset_index()
     )
+
+    summary["delay_rate_pct"] = (
+    	 summary["delayed_departures"]
+        / summary["departure_count"]
+        * 100
+    ).round(2)
 
     summary["processed_at_utc"] = datetime.now(timezone.utc).isoformat()
     return summary
