@@ -46,6 +46,11 @@ def normalize_departures(raw):
     for call in stop["estimatedCalls"]:
         line = call["serviceJourney"]["line"]
 
+        aimed = pd.to_datetime(call["aimedDepartureTime"])
+        expected = pd.to_datetime(call["expectedDepartureTime"])
+
+        delay_minutes = (expected - aimed).total_seconds() / 60
+
         rows.append({
             "stop_id": stop["id"],
             "stop_name": stop["name"],
@@ -53,16 +58,22 @@ def normalize_departures(raw):
             "line_name": line["name"],
             "transport_mode": line["transportMode"],
             "destination": call["destinationDisplay"]["frontText"],
-            "aimed_departure_time": call["aimedDepartureTime"],
-            "expected_departure_time": call["expectedDepartureTime"],
+
+            "aimed_departure_time": aimed.isoformat(),
+            "expected_departure_time": expected.isoformat(),
+
+            "delay_minutes": round(delay_minutes, 2),
+            "is_delayed": delay_minutes > 0,
+            "departure_hour": aimed.hour,
+            "departure_date": aimed.date().isoformat(),
+
             "realtime": call["realtime"],
-            "source_file": raw.get("source"),
-            "bronze_file": raw.get("stop_id"),
+            "source": raw.get("source"),
+            "bronze_path": raw.get("source_file"),
             "processed_at_utc": datetime.now(timezone.utc).isoformat(),
         })
 
     return pd.DataFrame(rows)
-
 
 def upload_silver(fs_client, df):
     timestamp = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
