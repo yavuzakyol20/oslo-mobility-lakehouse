@@ -1,14 +1,25 @@
 terraform {
   required_version = ">= 1.0"
+
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "~> 4.0"
+    }
+  }
 }
 
-provider "local" {}
+provider "azurerm" {
+  features {}
+}
 
-resource "local_file" "pipeline_info" {
-  filename = "${path.module}/pipeline_info.txt"
+resource "azurerm_resource_group" "main" {
+  name     = "rg-oslo-mobility-lakehouse"
+  location = "norwayeast"
 
-  content = <<EOT
-Oslo Mobility Lakehouse
-Infrastructure managed with Terraform
-EOT
+  tags = {
+    project     = "oslo-mobility-lakehouse"
+    environment = "dev"
+    managed_by  = "terraform"
+  }
 }
