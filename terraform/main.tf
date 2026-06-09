@@ -25,13 +25,15 @@ resource "azurerm_resource_group" "main" {
 }
 
 resource "azurerm_storage_account" "lakehouse" {
-  name                     = "oslomobilitylakehouse"
-  resource_group_name      = azurerm_resource_group.main.name
-  location                 = azurerm_resource_group.main.location
-  account_tier             = "Standard"
-  account_replication_type = "LRS"
-  account_kind             = "StorageV2"
-  is_hns_enabled           = true
+  name                            = "oslomobilitylakehouse"
+  resource_group_name             = azurerm_resource_group.main.name
+  location                        = azurerm_resource_group.main.location
+  account_tier                    = "Standard"
+  account_replication_type        = "LRS"
+  account_kind                    = "StorageV2"
+  is_hns_enabled                  = true
+  allow_nested_items_to_be_public = false
+  min_tls_version                 = "TLS1_0"
 
   tags = {
     project     = "oslo-mobility-lakehouse"
