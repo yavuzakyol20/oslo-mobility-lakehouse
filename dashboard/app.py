@@ -1,6 +1,14 @@
-import streamlit as st
 import pandas as pd
-from pathlib import Path
+import streamlit as st
+from io import BytesIO
+
+from azure.identity import DefaultAzureCredential
+from azure.storage.filedatalake import DataLakeServiceClient
+
+ACCOUNT_NAME = "oslomobilitylakehouse"
+FILE_SYSTEM = "lakehouse"
+GOLD_PATH = "gold/entur/line_performance"
+
 
 st.set_page_config(
     page_title="Oslo Mobility Analytics",
@@ -8,33 +16,61 @@ st.set_page_config(
 )
 
 st.title("🚆 Oslo Mobility Analytics Dashboard")
+st.markdown("Realtime public transport analytics from Entur data stored in Azure Data Lakehouse.")
 
-gold_dir = Path("data")
 
-st.markdown(
-    """
-    This dashboard will visualize mobility analytics
-    generated from Entur public transport data.
-    """
-)
+@st.cache_data
+def load_latest_line_performance():
+    account_url = f"https://{ACCOUNT_NAME}.dfs.core.windows.net"
+    credential = DefaultAzureCredential()
+
+    service_client = DataLakeServiceClient(
+        account_url=account_url,
+        credential=credential,
+    )
+
+    fs_client = service_client.get_file_system_client(FILE_SYSTEM)
+
+    parquet_files = [
+        p.name
+        for p in fs_client.get_paths(path=GOLD_PATH)
+        if p.name.endswith(".parquet")
+    ]
+
+    if not parquet_files:
+        return pd.DataFrame()
+
+    latest_file = sorted(parquet_files)[-1]
+
+    raw = fs_client.get_file_client(latest_file).download_file().readall()
+    df = pd.read_parquet(BytesIO(raw))
+
+    return df
+
+
+df = load_latest_line_performance()
+
+if df.empty:
+    st.warning("No Gold line performance data found.")
+    st.stop()
+
+total_departures = int(df["total_departures"].sum())
+delayed_departures = int(df["delayed_departures"].sum())
+delay_rate = round(delayed_departures / total_departures * 100, 2)
+avg_delay = round(df["avg_delay_minutes"].mean(), 2)
 
 col1, col2, col3 = st.columns(3)
 
-col1.metric("Total Departures", "N/A")
-col2.metric("Delay Rate", "N/A")
-col3.metric("Average Delay", "N/A")
+col1.metric("Total Departures", total_departures)
+col2.metric("Delay Rate", f"{delay_rate}%")
+col3.metric("Average Delay", f"{avg_delay} min")
 
-st.subheader("Line Performance")
+st.subheader("Delay Rate by Line")
 
-sample_df = pd.DataFrame(
-    {
-        "line": ["L1", "RE11", "R21"],
-        "delay_rate_pct": [40, 20, 5],
-    }
-)
+chart_df = df[["line_code", "delay_rate_pct"]].set_index("line_code")
+st.bar_chart(chart_df)
 
-st.bar_chart(
-    sample_df.set_index("line")
-)
+st.subheader("Line Performance Data")
+st.dataframe(df, use_container_width=True)
 
-st.success("Dashboard initialized successfully.")
+st.success("Dashboard loaded from Azure Gold layer.")
