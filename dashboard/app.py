@@ -46,7 +46,31 @@ def load_latest_line_performance():
     df = pd.read_parquet(BytesIO(raw))
 
     return df
+@st.cache_data
+def load_latest_delay_trends():
+    account_url = f"https://{ACCOUNT_NAME}.dfs.core.windows.net"
+    credential = DefaultAzureCredential()
 
+    service_client = DataLakeServiceClient(
+        account_url=account_url,
+        credential=credential,
+    )
+
+    fs_client = service_client.get_file_system_client(FILE_SYSTEM)
+
+    parquet_files = [
+        p.name
+        for p in fs_client.get_paths(path="gold/entur/delay_trends")
+        if p.name.endswith(".parquet")
+    ]
+
+    if not parquet_files:
+        return pd.DataFrame()
+
+    latest_file = sorted(parquet_files)[-1]
+
+    raw = fs_client.get_file_client(latest_file).download_file().readall()
+    return pd.read_parquet(BytesIO(raw))
 
 df = load_latest_line_performance()
 
@@ -92,3 +116,22 @@ st.dataframe(
     top_delayed,
     use_container_width=True,
 )
+
+st.subheader("Historical Delay Trends")
+
+trend_df = load_latest_delay_trends()
+
+if trend_df.empty:
+    st.warning("No delay trend data found.")
+else:
+    trend_df["departure_date"] = pd.to_datetime(trend_df["departure_date"])
+
+    trend_chart = (
+        trend_df.sort_values("departure_date")
+        .set_index("departure_date")[["delay_rate_pct"]]
+    )
+
+    st.line_chart(trend_chart)
+
+    st.subheader("Delay Trends Data")
+    st.dataframe(trend_df, use_container_width=True)
