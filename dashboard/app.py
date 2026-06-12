@@ -65,12 +65,30 @@ col1.metric("Total Departures", total_departures)
 col2.metric("Delay Rate", f"{delay_rate}%")
 col3.metric("Average Delay", f"{avg_delay} min")
 
-st.subheader("Delay Rate by Line")
+st.subheader("Top Delayed Lines")
 
-chart_df = df[["line_code", "delay_rate_pct"]].set_index("line_code")
-st.bar_chart(chart_df)
+top_delayed = (
+    df.sort_values("delay_rate_pct", ascending=False)
+    [["line_code", "line_name", "transport_mode", "delay_rate_pct", "avg_delay_minutes"]]
+)
 
-st.subheader("Line Performance Data")
-st.dataframe(df, use_container_width=True)
+st.bar_chart(
+    top_delayed.set_index("line_code")["delay_rate_pct"]
+)
 
-st.success("Dashboard loaded from Azure Gold layer.")
+st.subheader("Average Delay by Line")
+
+avg_delay_chart = (
+    df.sort_values("avg_delay_minutes", ascending=False)
+    [["line_code", "avg_delay_minutes"]]
+    .set_index("line_code")
+)
+
+st.bar_chart(avg_delay_chart)
+
+st.subheader("Line Performance Table")
+
+st.dataframe(
+    top_delayed,
+    use_container_width=True,
+)
