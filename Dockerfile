@@ -8,4 +8,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-CMD ["python", "src/ingestion/real_weather_ingestion.py"]
+EXPOSE 8501
+
+CMD ["streamlit", "run", "dashboard/app.py", "--server.address=0.0.0.0"]

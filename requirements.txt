@@ -1,6 +1,9 @@
-pandas
 requests
 pyspark
-pyarrow
 delta-spark
 pytest
+azure-identity
+azure-storage-file-datalake
+streamlit
+pandas
+pyarrow
