@@ -1,3 +1,5 @@
+![CI](https://github.com/yavuzakyol20/oslo-mobility-lakehouse/actions/workflows/ci.yml/badge.svg)
+
 Oslo Mobility Lakehouse
 
 An end-to-end Azure-based Lakehouse platform that ingests, transforms, analyzes and visualizes real-time public transportation data from Entur (Norwegian public transport data platform).
