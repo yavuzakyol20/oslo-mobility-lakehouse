@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: mobility-dashboard
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: mobility-dashboard
+
+  template:
+    metadata:
+      labels:
+        app: mobility-dashboard
+
+    spec:
+      containers:
+        - name: dashboard
+
+          image: nginx
+
+          ports:
+            - containerPort: 80
