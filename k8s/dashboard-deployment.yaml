@@ -19,8 +19,8 @@ spec:
     spec:
       containers:
         - name: dashboard
-
-          image: nginx
+          image: oslo-mobility-dashboard:latest
+          imagePullPolicy: Never
 
           ports:
-            - containerPort: 80
+            - containerPort: 8501
