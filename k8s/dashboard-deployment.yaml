@@ -22,5 +22,9 @@ spec:
           image: oslo-mobility-dashboard:latest
           imagePullPolicy: Never
 
+          envFrom:
+            - configMapRef:
+                name: dashboard-config
+
           ports:
             - containerPort: 8501

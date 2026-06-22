@@ -7,3 +7,4 @@ metadata:
 data:
   ENVIRONMENT: "dev"
   PROJECT_NAME: "oslo-mobility-lakehouse"
+  DASHBOARD_PORT: "8501"
