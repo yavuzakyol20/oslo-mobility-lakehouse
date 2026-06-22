@@ -25,6 +25,12 @@ spec:
           envFrom:
             - configMapRef:
                 name: dashboard-config
+          env:
+            - name: STORAGE_ACCOUNT
+              valueFrom:
+                secretKeyRef:
+                  name: dashboard-secret
+                  key: STORAGE_ACCOUNT
 
           ports:
             - containerPort: 8501
