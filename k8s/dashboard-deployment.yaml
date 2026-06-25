@@ -2,7 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 
 metadata:
-  name: mobility-dashboard
+  name: mobility-dashboard-deployment
+  namespace: oslo-mobility
 
 spec:
   replicas: 1

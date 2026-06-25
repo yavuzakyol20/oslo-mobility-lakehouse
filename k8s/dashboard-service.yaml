@@ -3,6 +3,7 @@ kind: Service
 
 metadata:
   name: mobility-dashboard-service
+  namespace: oslo-mobility
 
 spec:
   selector:

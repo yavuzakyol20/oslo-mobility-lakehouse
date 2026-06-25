@@ -2,7 +2,8 @@ apiVersion: v1
 kind: ConfigMap
 
 metadata:
-  name: dashboard-config
+  name: mobility-dashboard-configmap
+  namespace: oslo-mobility
 
 data:
   ENVIRONMENT: "dev"
