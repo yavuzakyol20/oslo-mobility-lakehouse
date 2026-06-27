@@ -23,6 +23,14 @@ spec:
           image: oslo-mobility-dashboard:latest
           imagePullPolicy: Never
 
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+
           envFrom:
             - configMapRef:
                 name: dashboard-config
@@ -35,17 +43,3 @@ spec:
 
           ports:
             - containerPort: 8501
-
-     livenessProbe:
-       httpGet:
-         path: /
-         port: 8501
-       initialDelaySeconds: 20
-       periodSeconds: 10
-
-     readinessProbe:
-       httpGet:
-         path: /
-         port: 8501
-       initialDelaySeconds: 10
-       periodSeconds: 5
