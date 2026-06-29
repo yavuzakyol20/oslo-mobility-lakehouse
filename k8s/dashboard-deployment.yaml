@@ -2,11 +2,17 @@ apiVersion: apps/v1
 kind: Deployment
 
 metadata:
-  name: mobility-dashboard-deployment
-  namespace: oslo-mobility
+  name: mobility-dashboard
+  namespace: default
 
 spec:
   replicas: 1
+
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
 
   selector:
     matchLabels:
@@ -23,6 +29,9 @@ spec:
           image: oslo-mobility-dashboard:latest
           imagePullPolicy: Never
 
+          ports:
+            - containerPort: 8501
+
           resources:
             requests:
               cpu: "100m"
@@ -34,6 +43,7 @@ spec:
           envFrom:
             - configMapRef:
                 name: dashboard-config
+
           env:
             - name: STORAGE_ACCOUNT
               valueFrom:
@@ -41,8 +51,14 @@ spec:
                   name: dashboard-secret
                   key: STORAGE_ACCOUNT
 
-          ports:
-            - containerPort: 8501
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8501
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
 
           livenessProbe:
             httpGet:
@@ -50,14 +66,5 @@ spec:
               port: 8501
             initialDelaySeconds: 30
             periodSeconds: 15
-            timeoutSeconds: 5
-            failureThreshold: 3
-
-          readinessProbe:
-            httpGet:
-              path: /
-              port: 8501
-            initialDelaySeconds: 15
-            periodSeconds: 10
             timeoutSeconds: 5
             failureThreshold: 3
