@@ -42,7 +42,7 @@ spec:
 
           envFrom:
             - configMapRef:
-                name: dashboard-config
+                name: mobility-dashboard-config
 
           env:
             - name: STORAGE_ACCOUNT
